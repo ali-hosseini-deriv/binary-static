@@ -9908,7 +9908,6 @@ var BinaryLoader = function () {
         window.addEventListener('beforeunload', beforeContentChange);
         container.addEventListener('binarypjax:after', afterContentChange);
         BinaryPjax.init(container, '#content');
-
         ThirdPartyLinks.init();
     };
 
@@ -11912,6 +11911,13 @@ var Page = function () {
             }
         }
         TrafficSource.setData();
+
+        BinarySocket.wait('authorize', 'website_status', 'landing_company').then(function () {
+            var is_uk_residence = Client.get('residence') === 'gb' || State.getResponse('website_status.clients_country') === 'gb';
+            if (is_uk_residence || Client.get('landing_company_shortcode') === 'iom') {
+                getElementById('gamstop_uk_display').setVisibility(1);
+            }
+        });
     };
 
     var recordAffiliateExposure = function recordAffiliateExposure() {
@@ -14866,7 +14872,7 @@ var Guide = function () {
             event_type: 'next',
             nextButton: btn_next
         }, {
-            selector: '#contracts_list',
+            selector: '#contract_prices_container',
             description: '<h1>' + localize('Step') + ' 4</h1>' + localize('Predict the direction<br />and purchase'),
             event_type: 'next',
             nextButton: btn_finish
